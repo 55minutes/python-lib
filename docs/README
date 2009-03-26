@@ -1,0 +1,7 @@
+Local Settings
+==============
+Contained in this directory is a sample local_settings.py file. This file should be copied to the $DJANGO_PROJECT/settings directory.
+
+The purpose for this file is to specify local overrides of parameters.
+
+Common usage include different setting for development and production environments.

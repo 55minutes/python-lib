@@ -1,0 +1,23 @@
+{% extends "imageview/base" %}
+{% load media %}
+
+{% block page_title %}55&#215;55 | year one: {{ image.title|lower }}{% endblock %}
+{% block additional_headers %}
+  <script type="text/javascript" src="{% media_prefix %}imageview/js/lightbox_plus.js"></script>
+  <link rel="stylesheet" type="text/css" media="all" href="{% media_prefix %}imageview/css/lightbox.css" />
+    <style type="text/css">
+  <!--
+    #image { width: {{ img_width }}px; margin: 0 {{ r_margin }}px; }
+    * html #image { margin: 0 {{ ie_r_margin }}px; }
+    .caption { background: {{ bgcolor }}; }
+  -->
+    </style>
+{% endblock %}
+
+{% block content %}
+      <div id="back"><a href="../{% if is_earliest %}{{ latest_image.slug|urlencode }}{% else %}{{ image.get_previous_by_index.slug|urlencode }}{% endif %}/" accesskey=","><span>back</span></a></div>
+      <div id="next"><a href="../{% if is_latest %}{{ earliest_image.slug|urlencode }}{% else %}{{ image.get_next_by_index.slug|urlencode }}{% endif %}/" accesskey="."><span>next</span></a></div>
+      <div id="image"><a href="{{ image.get_full_url }}" rel="lightbox" accesskey="/"><img src="{{ img_url }}" width="{{ img_width }}" height="{{ img_height }}" alt="{{ image.title|lower }}" title="{{ image.title|lower }}" /></a>
+      <p class="caption"><strong>{{ image.title|lower }} / {{ image.get_photographer.first_name }}</strong><br />{{ image.description }}</p>
+      </div><!--image-->
+{% endblock %}

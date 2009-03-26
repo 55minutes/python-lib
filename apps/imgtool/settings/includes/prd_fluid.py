@@ -1,0 +1,1 @@
+IMAGEMAGICK_ROOT = ur'/usr/local/bin'

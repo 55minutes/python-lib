@@ -1,0 +1,23 @@
+#lightbox {
+	background-color: #dfdfdf;
+	padding: 10px;
+	border-bottom: 1px solid #777;
+	border-right: 1px solid #777;
+}
+#overlay {
+	background-image: url(../images/lightbox/overlay.png);
+}
+#lightboxCaption {
+	color: #000;
+	background-color: #dfdfdf;
+    padding: .25em 0;
+	font-size: 90%;
+	text-align: center;
+	border-bottom: 1px solid #777;
+	border-right: 1px solid #777;
+}
+* html #overlay {
+	background-color: #000;
+	background-image: url(../images/lightbox/blank.gif);
+	filter: Alpha(opacity=50);
+}

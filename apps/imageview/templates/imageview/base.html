@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+  <title>{% block page_title %}{% endblock %}</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="keywords" content="george song, matt brictson, fifty five by
+  fifty five, 55 x 55, photography, photograph, photographs, photographer,
+  photos, digital, design, web design, information architecture, interaction
+  design, user experience, photoblog, pictures, nikon, canon, san francisco, 55
+  minutes" />
+  <meta name="description" content="55x55: first year" />
+  <meta name="robots" content="index, follow, noimageindex, noimageclick" />
+  <meta name="author" content="George Song &amp; Matt Brictson" />
+  <meta name="copyright" content="All rights Reserved. All wrongs reversed." />
+
+  {% load media %}
+  <script type="text/javascript" src="{% media_prefix %}imageview/js/prototype.lite.js"></script>
+  <script type="text/javascript" src="{% media_prefix %}imageview/js/moo.fx.js"></script>
+  <script type="text/javascript" src="{% media_prefix %}imageview/js/moo.fx.pack.js"></script>
+  <script type="text/javascript" src="{% media_prefix %}imageview/js/global.js"></script>
+
+  <link rel="stylesheet" type="text/css" media="all" href="{% media_prefix %}imageview/css/master.css" />
+  {% block additional_headers %}{% endblock %}
+
+  <script type="text/javascript">
+  <!--
+  // === main ===
+  addEvent(window,"load",function() {
+  	var lightbox = new LightBox({
+  		loadingimg:'{% media_prefix %}imageview/images/lightbox/loading.gif',
+  		expandimg:'{% media_prefix %}imageview/images/lightbox/expand.gif',
+  		shrinkimg:'{% media_prefix %}imageview/images/lightbox/shrink.gif',
+  		closeimg:'{% media_prefix %}imageview/images/lightbox/close.gif'
+  	});
+  });
+  -->
+  </script>
+
+  
+</head>
+
+
+
+<body{% block body_id %}{% endblock %}>
+<div id="aboutinfo">
+  <div id="replace55" title="55minutes">
+    <h2><a href="http://www.55minutes.com">55minutes</a></h2>
+  </div><!--replacelogo-->
+  <p>This is the companion site to <b>Fifty Five By Fifty Five</b>, a book of
+  photographs by George Song and Matt Brictson.</p>
+  <p>These images reflect how we see the world&mdash;who we are, where we’ve
+  been and what we value. Life has been hectic since we founded our web
+  application firm, 55&nbsp;Minutes, but photography keeps us grounded.</p>
+  <p>Take a look and watch for new shots uploaded periodically. You can also <a
+    href="http://www.55minutes.com/contact/">request</a> your own copy of the
+  book. We hope these images will encourage you to seek the beauty and
+  inspiration in everyday life.</p>
+  <p class="signature"><b>George Song and Matt Brictson</b><br />Founders, <a href="http://www.55minutes.com">55&nbsp;Minutes</a></p>
+</div><!--aboutinfo-->
+
+
+  <div id="wrapper">
+  
+    <div id="replacelogo" title="55&#215;55&mdash;a collection of photographs">
+      <h2><a href="{{ aru }}/gallery/" accesskey="g">55&#215;55&mdash;a collection of photographs</a></h2>
+    </div><!--replacelogo-->
+
+    <div id="about"><a href="javascript://" onclick="javascript:sw('aboutinfo');fadeabout.toggle('height');return false;">ABOUT</a></div>
+  
+    <div id="content">
+         {% block content %}{% endblock %}
+    </div><!--content-->
+  </div><!--wrapper-->
+
+  <div id="footer">
+    <p>copyright &copy; 2006. no images may be reproduced in any form whatsoever without express permission.</p>
+  </div><!--footer-->
+</body></html>

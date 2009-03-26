@@ -1,0 +1,199 @@
+/* css information
+--------------------------------------------------------
+
+	twohtirty							screen css
+	author								paul jarvis
+	started								dec 07, 2005
+
+	7fcc00
+	539200
+	ecffcb
+	4b8e00
+
+-------------------------------------------------------- */
+
+* { padding: 0; margin: 0; border: 0; } 
+
+body {
+	font: 10px/1 "Lucida Grande", tahoma, sans-serif;
+	color: #000;
+	text-align: center;
+	background: #fff;
+}
+
+li { list-style: none; }
+.hide { display: none; }
+
+
+
+
+
+
+/* global interface elements
+-------------------------------------------------------- */
+#wrapper {
+	position: relative;
+	width: 684px;
+	margin: 0 auto;
+	text-align: left;
+	background: url("../images/frame_back.gif") no-repeat top center;
+	padding-top: 102px;
+}
+
+	#content {
+		position: relative;
+		padding: 0 12px;
+	}
+	
+		#gallery #content {
+			padding-left: 42px;
+		}
+	
+	#aboutinfo {
+        position: relative;
+        display: none;
+        margin: 0 auto;
+        text-align: left;
+        width: 660px;
+        background: #dfdfdf;
+	}
+	
+	#footer {
+		padding: 10px 0 0 0;
+	}
+
+
+
+
+/* navigation elements
+-------------------------------------------------------- */
+#replacelogo {
+	position: absolute;
+	top: 0px; left: 12px;
+	width: 270px; height: 64px;
+	background: url("../images/title.gif") no-repeat;
+}
+
+	#replacelogo a, #replacelogo h2 {
+		display: block;
+		width: 270px; height: 64px;
+		text-indent: -9999px;
+		background: url("../images/title.gif") no-repeat;
+		text-decoration: none;
+	} 
+
+	#replacelogo a:hover {
+		background: url("../images/title.gif") no-repeat 0 -60px;
+	}
+
+#replace55 {
+    top: 1em;
+    left: 60px;
+	position: absolute;
+	width: 47px; height: 47px;
+	background: #dfdfdf url("../images/55logo_grey_with_back.gif") no-repeat;
+}
+	#replace55 a, #replace55 h2 {
+        display: block;
+		width: 47px; height: 47px;
+		text-indent: -9999px;
+		background: none;
+		text-decoration: none;
+	} 
+	
+#about {
+	position: absolute;
+	top: 0; right: 0;
+	margin-right: 24px;
+	float: right;
+	display: inline;
+}
+
+	#about a {
+		padding: 3px 6px;
+		display: block;
+		background: #dfdfdf;
+		color: #000;
+		text-decoration: none;
+	}
+
+#next a {
+	display: block;
+	height: 100%; 
+	float: right;
+	background: url("../images/next.gif") no-repeat center center;
+}
+
+#image {
+	text-align: left;
+}
+
+#back a {
+	display: block;
+	height: 100%; 
+	float: left;
+	background: url("../images/prev.gif") no-repeat center center;
+}	
+
+#next a span, #back a span {
+	display: none;
+}
+
+#next a, #back a { width: 70px; height: 350px; }
+
+* html #next a, * html #back a { width: 67px; } 
+
+	
+/* content elements
+-------------------------------------------------------- */
+#footer p {
+	padding: 30px 0 5px 0;
+	color: #bababa;
+}
+
+.caption {
+	color: #fff;
+	padding: 12px;
+	line-height: 1.2;
+}
+
+.caption a {
+    color: #fff;
+}
+
+.caption a:hover {
+    color: #dfdfdf;
+}
+
+#aboutinfo a {
+    color: #000;
+}
+
+#aboutinfo a:hover {
+    color: #777;
+}
+
+#aboutinfo p {
+	padding: 1em 120px 0 120px;
+	line-height: 1.4em;
+}
+
+#aboutinfo p.signature {
+    padding-top: 2em;
+    padding-bottom: 1.5em;
+}
+
+#gallery #content a img {
+	display: inline;
+	border: 3px solid #bababa;
+	margin: 0 14px 14px 0;
+}
+
+
+#gallery #content h2 {
+	display: block;
+	padding: 24px 0 6px 0;
+	font-size: 30px;
+	letter-spacing: -1px;
+	color: #bababa;
+}
