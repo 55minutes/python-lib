@@ -1,7 +1,0 @@
-+ this app belongs to a project named fiftyfive
-
-+ "css" contains the css for the template which needs to go into the /media directory of django
-
-+ thebook.fcgi is the fcgi script to interact with FCGI deployments
-
-+ imageview contains the entire django app. this app requires the custom context_processor to get {{ aru }} working in templates
