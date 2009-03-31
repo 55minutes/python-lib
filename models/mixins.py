@@ -1,8 +1,7 @@
-class DirtyFieldsMixin(object):
+from django.db import models
+
+class DirtyFieldsMixin(models.Model):
     """
-    *IMPORTANT* Since this mixin overrides both ``__init__()``, it must come before 
-    ``django.db.models.Model`` in the MRO.
-    
     The mixin provides a way to track fields that have changed (*dirty* fields)
     since object instantiation or the last save.
 
@@ -62,3 +61,6 @@ class DirtyFieldsMixin(object):
 
     def update_original_state(self):
         self._original_state_ = self._as_dict()
+
+    class Meta:
+        abstract=True
