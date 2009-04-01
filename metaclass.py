@@ -1,4 +1,11 @@
-__all__ = ('PluginMount',)
+class SingletonType(type):
+    def __call__(cls, *args, **kwargs):
+        if getattr(cls, '__instance__', None) is None:
+            instance = cls.__new__(cls)
+            instance.__init__(*args, **kwargs)
+            cls.__instance__ = instance
+        return cls.__instance__
+
 
 class PluginMount(type):
     """

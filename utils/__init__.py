@@ -1,6 +1,5 @@
 from cookies import *
 from querysets import *
-from plugin import *
 
 class SimpleAttrs(object):
     """
