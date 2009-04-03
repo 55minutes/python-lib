@@ -1,10 +1,12 @@
-import coverage, coverage_html, imp, os, re, sys
+import coverage, imp, os, re, sys
 from glob import glob
 
 from django.conf import settings
 from django.contrib.admin.sites import AlreadyRegistered
 from django.db.models import get_app, get_apps
 from django.test.simple import run_tests as base_run_tests
+
+from fiftyfive.utils.coverage_testing import output_module_html
 
 try:
     set
@@ -40,7 +42,7 @@ def modules_from_pyfiles(root, pyfiles):
             except AlreadyRegistered:
                 pass # This is a Django admin definition module
 
-def remove_blacklisted(pathlist):
+def prune_blacklisted(pathlist):
     for p in pathlist:
         for r in RE_BLACKLIST:
             if r.search(p):
@@ -48,9 +50,9 @@ def remove_blacklisted(pathlist):
                 break
     return pathlist
 
-def remove_dirs(root, dirlist):
+def prune_dirs(root, dirlist):
     dirlist = [os.path.join(root, d) for d in dirlist]
-    dirlist = remove_blacklisted(dirlist)
+    dirlist = prune_blacklisted(dirlist)
     return [os.path.basename(d) for d in dirlist]
 
 def get_all_app_modules(app_module):
@@ -66,7 +68,7 @@ def get_all_app_modules(app_module):
     modules = list()
     paths = list()
     for root, dirs, files in os.walk(app_dirpath):
-        dirs = remove_dirs(root, dirs)
+        dirs = prune_dirs(root, dirs)
         stop = False
         for r in RE_BLACKLIST:
             if r.search(root):
@@ -74,7 +76,7 @@ def get_all_app_modules(app_module):
                 break
         if stop: continue
 
-        pyfiles = remove_blacklisted(glob('%s/*.py' %root))
+        pyfiles = prune_blacklisted(glob('%s/*.py' %root))
         paths.extend(pyfiles)
         modules.extend(modules_from_pyfiles(root, pyfiles))
     return paths, modules
@@ -112,10 +114,10 @@ def run_tests(test_labels, verbosity=1, interactive=True,
     elif coverage_modules:
         coverage.report(list(coverage_modules), show_missing=1)
 
-##    for module in coverage_modules:
-##        f, s, m, mf = coverage.analysis(module)
-##        fo = file(os.path.join('test_html', module.__name__ + '.html'), 'w+')
-##        coverage_html.colorize_file(f, outstream=fo, not_covered=mf)
-##        fo.close()
+    outdir = os.path.abspath(getattr(settings, 'COVERAGE_TEST_HTML_OUTPUT_DIR', 'test_html'))
+    for module in coverage_modules:
+        output_module_html(module, outdir)
+    print >>sys.stdout
+    print >>sys.stdout, "HTML reports were output to '%s'" %outdir
 
     return results
