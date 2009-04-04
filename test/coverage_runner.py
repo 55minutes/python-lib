@@ -6,7 +6,7 @@ from django.contrib.admin.sites import AlreadyRegistered
 from django.db.models import get_app, get_apps
 from django.test.simple import run_tests as base_run_tests
 
-from fiftyfive.utils.coverage_testing import output_module_html
+from fiftyfive.utils.coverage_testing import html_report
 
 try:
     set
@@ -115,8 +115,7 @@ def run_tests(test_labels, verbosity=1, interactive=True,
         coverage.report(list(coverage_modules), show_missing=1)
 
     outdir = os.path.abspath(getattr(settings, 'COVERAGE_TEST_HTML_OUTPUT_DIR', 'test_html'))
-    for module in coverage_modules:
-        output_module_html(module, outdir)
+    html_report(coverage_modules, outdir)
     print >>sys.stdout
     print >>sys.stdout, "HTML reports were output to '%s'" %outdir
 

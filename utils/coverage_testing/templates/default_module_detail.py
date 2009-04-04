@@ -5,8 +5,12 @@ TOP = """\
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
     <title>Code coverage report: %(title)s</title>
     <style type="text/css" media="screen">
+      .module_name {
+        font-family:monospace;
+      }
+    
       #content-header {
-        padding:0 0 0 2.8em;
+        padding:0 0 0 2.5em;
       }
 
       #content-header h1 {
@@ -24,7 +28,7 @@ TOP = """\
       }
 
       #source-listing ol {
-        font-family:"Courier New",Courier,mono;
+        font-family:monospace;
         padding:0 0 0 2.8em;
         width:90%%;
       }
@@ -59,9 +63,31 @@ TOP = """\
   <body>
 """
 
+NAV = """\
+<div class="nav">
+  <a href="%(prev_link)s">%(prev_label)s</a> &lt;&lt;
+  <a href="%(up_link)s">%(up_label)s</a>
+  &gt;&gt; <a href="%(next_link)s">%(next_label)s</a>
+</div>
+"""
+
+NAV_NO_PREV = """\
+<div class="nav">
+  <a href="%(up_link)s">%(up_label)s</a>
+  &gt;&gt; <a href="%(next_link)s">%(next_label)s</a>
+</div>
+"""
+
+NAV_NO_NEXT = """\
+<div class="nav">
+  <a href="%(prev_link)s">%(prev_label)s</a> &lt;&lt;
+  <a href="%(up_link)s">%(up_label)s</a>
+</div>
+"""
+
 CONTENT_HEADER = """\
 <div id="content-header">
-  <h1><code>%(title)s</code></h1>
+  <h1 class="module_name">%(title)s</h1>
   <p>Source file: <span>%(source_file)s</span></p>
   <p>Stats: <span>%(total_count)d lines, %(executed_count)d executed, 
   %(excluded_count)d excluded: %(percent_covered)0.1f%% covered</span></p> 
@@ -77,7 +103,7 @@ CONTENT_BODY = """\
 </div>
 """
 
-SOURCE_LINE = '<li class="%(line_style)s"><code>%(source_line)s</code></li>'
+SOURCE_LINE = '<li class="%(line_status)s"><code>%(source_line)s</code></li>'
 
 BOTTOM = """\
   </body>
