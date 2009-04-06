@@ -5,57 +5,100 @@ TOP = """\
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
     <title>Code coverage report</title>
     <style type="text/css" media="screen">
-      body {
-        font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+      a
+      {
+        color: #3d707a;
       }
       
-      #content-header {
-        margin-left:45px;
+      a:hover, a:active
+      {
+        color: #bf7d18;
       }
-      #content-header h1 {
-        font-size:18px;
-        margin-bottom:0;
-      }
-      #content-header p {
-        font-size:13px;
-        margin:0;
-        color:#999;
-      }
-      
-      #result-list table {
+    
+      body
+      {
+        font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
         font-size: 13px;
-        background: #fff;
-        margin: 15px 45px;
+      }
+      
+      #content-header
+      {
+        margin-left: 50px;
+      }
+
+      #content-header h1
+      {
+        font-size: 18px;
+        margin-bottom: 0;
+      }
+
+      #content-header p
+      {
+        font-size: 13px;
+        margin: 0;
+        color: #909090;
+      }
+      
+      #result-list table
+      {
+        font-size: 13px;
+        background: white;
+        margin: 15px 50px;
         width: 600px;
         border-collapse: collapse;
         text-align: right;
       }
-      #result-list thead {
-        border-bottom: 2px solid #6678b1;
+
+      #result-list thead tr.last th,
+      th.lines-of-code
+      {
+        border-bottom: 1px solid #6d5e48;
       }
-      #result-list th {
-        font-size: 14px;
-        font-weight: normal;
-        color: #039;
-        padding: 0 12px;
-      }
-      #result-list td {
-        border-bottom: 1px solid #ccc;
-        color: #669;
-        padding: 6px 12px;
+      
+      th.lines-of-code
+      {
+        text-align: center;
       }
 
-      #result-list .normal {
-        color:green;
+      #result-list th
+      {
+        padding: 3px 12px;
+        font-size: 14px;
+        font-weight: normal;
+        color: #937F61;
       }
-      #result-list .warning {
-        color:#ffcc00;
+
+      #result-list td
+      {
+        border-bottom: 1px solid #e0e0e0;
+        color: #606060;
+        padding: 6px 12px;
       }
-      #result-list .critical {
-        color:red;
+      
+      #result-list tfoot td
+      {
+        color: #937F61;
+        font-weight: bold;
       }
-      #result-list .module-name {
-        text-align:left;
+
+      #result-list .normal
+      {
+        color: #609030;
+      }
+
+      #result-list .warning
+      {
+        color: #d0a000;
+      }
+
+      #result-list .critical
+      {
+        color: red;
+      }
+
+      #result-list .module-name
+      {
+        text-align: left;
       }
    </style>
   </head>
@@ -74,11 +117,11 @@ CONTENT_BODY = """\
 <div id="result-list">
   <table>
     <thead>
-      <tr style="text-align:center;">
-        <th> </th>
-        <th colspan="3" style="border-bottom:2px solid #6678b1;">Lines of code</th>
-      </tr>
       <tr>
+        <th>&nbsp;</th>
+        <th colspan="3" class="lines-of-code">Lines of code</th>
+      </tr>
+      <tr class="last">
         <th class="module-name">Module</th>
         <th>total</th>
         <th>executed</th>
@@ -86,6 +129,9 @@ CONTENT_BODY = """\
         <th>%% covered</th>
       </tr>
     </thead>
+    <tbody>
+      %(module_stats)s
+    </tbody>
     <tfoot>
       <tr>
         <td class="module-name">Total</td>
@@ -95,9 +141,6 @@ CONTENT_BODY = """\
         <td>%(overall_covered)0.1f%%</td>
       </tr>
     </tfoot>
-    <tbody>
-      %(module_stats)s
-    </tbody>
   </table>
 </div>
 """

@@ -5,81 +5,117 @@ TOP = """\
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
     <title>Code coverage report: %(title)s</title>
     <style type="text/css" media="screen">
-      body {
-        font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+      a
+      {
+        color: #3d707a;
       }
       
-      .nav {
-        font-size:12px;
-        margin-left:2.8em;
-      }
-
-      .module_name {
-        font-size:16px;
+      a:hover, a:active
+      {
+        color: #bf7d18;
       }
     
-      #content-header {
-        font-size:12px;
-        padding:1em 0 1em 2.8em;
+      body 
+      {
+        font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+        font-size: 13px;
+      }
+      
+      .nav 
+      {
+        font-size: 12px;
+        margin-left: 50px;
       }
 
-      #content-header h1 {
-        margin:10px 0 0 0;
-        color:blue;
+      .module_name 
+      {
+        font-size: 16px;
       }
     
-      #content-header p {
-        margin:0;
-        color:#999;
+      #content-header 
+      {
+        font-size: 12px;
+        padding: 18px 0 18px 50px;
       }
 
-      #content-header span {
-        font-weight:bold;
+      #content-header h1 
+      {
+        margin: 10px 0 0 0;
+        color: #583707;
+      }
+    
+      #content-header p 
+      {
+        margin: 0;
+        color: #909090;
+      }
+
+      #content-header span 
+      {
+        font-weight: bold;
       }
       
-      #content-header span.normal {
-        color:green;
+      #content-header span.normal 
+      {
+        color: #609030;
       }
-      #content-header span.warning {
-        color:#ffcc00;
+
+      #content-header span.warning 
+      {
+        color: #d0a000;
       }
-      #content-header span.critical {
-        color:red;
+
+      #content-header span.critical 
+      {
+        color: red;
       }
       
-      #source-listing {
-        margin-bottom:1.5em;
+      #source-listing 
+      {
+        margin-bottom: 24px;
       }
 
-      #source-listing ol {
-        font-family:monospace;
-        padding:0 0 0 2.8em;
-        width:90%%;
+      #source-listing ol 
+      {
+        padding: 0 0 0 50px;
+        width: 90%%;
+        font-family: monospace;
+        list-style-position: outside;
       }
 
-      #source-listing ol li {
-        font-size:small;
+      #source-listing ol li 
+      {
+        line-height: 18px;
+        font-size: small;
       }
         
-      #source-listing ol code {
-        padding:0 0 0 .2em;
-        font-size:medium;
-        white-space:pre;
+      #source-listing ol code 
+      {
+        padding:  0;
+        font-size: medium;
+        white-space: pre;
       }
       
-      #source-listing li.normal {
-        color:gray;
+      #source-listing li.normal 
+      {
+        color: #707070;
       }
-      #source-listing li.executed {
-        color:#669933;
+
+      #source-listing li.executed 
+      {
+        color: #609030;
       }
-      #source-listing li.missed {
-        color:red;
-        font-weight:bold;
+
+      #source-listing li.missed 
+      {
+        color: red;
+        font-weight: bold;
       }
-      #source-listing li.excluded {
-        color:#6699ff;
-        font-weight:lighter;
+
+      #source-listing li.excluded 
+      {
+        color: #6090f0;
+        font-weight: lighter;
       }
    </style>
   </head>
