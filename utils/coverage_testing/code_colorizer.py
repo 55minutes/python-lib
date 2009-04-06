@@ -34,12 +34,13 @@ class ModuleVars(object):
         excluded_count = len(excluded)
         percent_covered = float(len(executed))/len(stmts)*100
         test_timestamp = time.strftime('%a %Y-%m-%d %H:%M %Z')
+        severity = 'normal'
+        if percent_covered < 75: severity = 'warning'
+        if percent_covered < 50: severity = 'critical'
 
         for k, v in locals().iteritems():
             setattr(self, k, v)
 
-    def as_dict(self):
-        return self.__dict__
 
 def html_report(modules, outdir):
     """
@@ -91,10 +92,7 @@ def html_report(modules, outdir):
     for module in modules:
         m_vars = ModuleVars(module)
         m_vars.module_link = os.path.join(m_subdirname, m_vars.module_name + '.html')
-        m_vars.severity = 'normal'
-        if m_vars.percent_covered < 75: m_vars.severity = 'warning'
-        if m_vars.percent_covered < 50: m_vars.severity = 'critical'
-        module_stats.append(module_index.MODULE_STAT %m_vars.as_dict())
+        module_stats.append(module_index.MODULE_STAT %m_vars.__dict__)
         total_lines += m_vars.total_count
         total_executed += m_vars.executed_count
         total_excluded += m_vars.excluded_count
@@ -174,11 +172,11 @@ def html_module_report(module, filename, nav=None):
         nav_html = module_detail.NAV_NO_PREV %nav
             
     fo = file(filename, 'wb+')
-    print >>fo, module_detail.TOP %m_vars.as_dict()
+    print >>fo, module_detail.TOP %m_vars.__dict__
     if nav:
         print >>fo, nav_html
-    print >>fo, module_detail.CONTENT_HEADER %m_vars.as_dict()
-    print >>fo, module_detail.CONTENT_BODY %m_vars.as_dict()
+    print >>fo, module_detail.CONTENT_HEADER %m_vars.__dict__
+    print >>fo, module_detail.CONTENT_BODY %m_vars.__dict__
     if nav:
         print >>fo, nav_html
     print >>fo, module_detail.BOTTOM

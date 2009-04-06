@@ -5,12 +5,22 @@ TOP = """\
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
     <title>Code coverage report: %(title)s</title>
     <style type="text/css" media="screen">
+      body {
+        font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+      }
+      
+      .nav {
+        font-size:12px;
+        margin-left:2.8em;
+      }
+
       .module_name {
-        font-family:monospace;
+        font-size:16px;
       }
     
       #content-header {
-        padding:0 0 0 2.5em;
+        font-size:12px;
+        padding:1em 0 1em 2.8em;
       }
 
       #content-header h1 {
@@ -25,6 +35,20 @@ TOP = """\
 
       #content-header span {
         font-weight:bold;
+      }
+      
+      #content-header span.normal {
+        color:green;
+      }
+      #content-header span.warning {
+        color:yellow;
+      }
+      #content-header span.critical {
+        color:red;
+      }
+      
+      #source-listing {
+        margin-bottom:1.5em;
       }
 
       #source-listing ol {
@@ -90,7 +114,8 @@ CONTENT_HEADER = """\
   <h1 class="module_name">%(title)s</h1>
   <p>Source file: <span>%(source_file)s</span></p>
   <p>Stats: <span>%(total_count)d lines, %(executed_count)d executed, 
-  %(excluded_count)d excluded: %(percent_covered)0.1f%% covered</span></p> 
+  %(excluded_count)d excluded: <span 
+  class="%(severity)s">%(percent_covered)0.1f%% covered</span></span></p> 
   <p>Generated: <span>%(test_timestamp)s</span></p>
 </div>
 """

@@ -5,24 +5,57 @@ TOP = """\
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
     <title>Code coverage report</title>
     <style type="text/css" media="screen">
-      #content-header h1 {
-        font-family:sans-serif;
-        margin-bottom:0;
+      body {
+        font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
       }
       
+      #content-header {
+        margin-left:45px;
+      }
+      #content-header h1 {
+        font-size:18px;
+        margin-bottom:0;
+      }
       #content-header p {
+        font-size:14px;
         margin:0;
         color:#999;
       }
       
-      #result-list tr.normal {
+      #result-list table {
+        font-size: 13px;
+        background: #fff;
+        margin: 15px 45px;
+        width: 600px;
+        border-collapse: collapse;
+        text-align: right;
+      }
+      #result-list thead {
+        border-bottom: 2px solid #6678b1;
+      }
+      #result-list th {
+        font-size: 14px;
+        font-weight: normal;
+        color: #039;
+        padding: 0 12px;
+      }
+      #result-list td {
+        border-bottom: 1px solid #ccc;
+        color: #669;
+        padding: 6px 12px;
+      }
+
+      #result-list .normal {
         color:green;
       }
-      #result-list tr.warning {
+      #result-list .warning {
         color:yellow;
       }
-      #result-list tr.critical {
+      #result-list .critical {
         color:red;
+      }
+      #result-list .module-name {
+        text-align:left;
       }
    </style>
   </head>
@@ -41,12 +74,12 @@ CONTENT_BODY = """\
 <div id="result-list">
   <table>
     <thead>
-      <tr>
+      <tr style="text-align:center;">
         <th> </th>
-        <th colspan="3">Lines of code</th>
+        <th colspan="3" style="border-bottom:2px solid #6678b1;">Lines of code</th>
       </tr>
       <tr>
-        <th>Module</th>
+        <th class="module-name">Module</th>
         <th>total</th>
         <th>executed</th>
         <th>excluded</th>
@@ -55,7 +88,7 @@ CONTENT_BODY = """\
     </thead>
     <tfoot>
       <tr>
-        <td>Total</td>
+        <td class="module-name">Total</td>
         <td>%(total_lines)d</td>
         <td>%(total_executed)d</td>
         <td>%(total_excluded)d</td>
@@ -70,12 +103,12 @@ CONTENT_BODY = """\
 """
 
 MODULE_STAT = """\
-<tr class="%(severity)s">
+<tr>
   <td class="module-name"><a href="%(module_link)s">%(module_name)s</a></td>
   <td>%(total_count)d</td>
   <td>%(executed_count)d</td>
   <td>%(excluded_count)d</td>
-  <td>%(percent_covered)0.1f%%</td>
+  <td class="%(severity)s">%(percent_covered)0.1f%%</td>
 </tr>
 """
 
