@@ -6,4 +6,4 @@ def register(model_or_iterable, admin_class=None, **options):
         site.unregister(model_or_iterable)
     except NotRegistered:
         pass
-    site.register(model_or_iterable, admin_class=None, **options)
+    site.register(model_or_iterable, admin_class=admin_class, **options)
