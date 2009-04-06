@@ -17,7 +17,7 @@ TOP = """\
         margin-bottom:0;
       }
       #content-header p {
-        font-size:14px;
+        font-size:13px;
         margin:0;
         color:#999;
       }
@@ -65,8 +65,8 @@ TOP = """\
 
 CONTENT_HEADER = """\
 <div id="content-header">
-  <h1>Coverage Report</h1>
-  <p>Generated: <span>%(test_timestamp)s</span></p>
+  <h1>Test Coverage Report</h1>
+  <p>Generated: %(test_timestamp)s</p>
 </div>
 """
 
