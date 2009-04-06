@@ -43,7 +43,7 @@ def modules_from_pyfiles(root, pyfiles):
                 pass # This is a Django admin definition module
 
 def prune_blacklisted(pathlist):
-    for p in pathlist:
+    for p in pathlist[:]:
         for r in RE_BLACKLIST:
             if r.search(p):
                 pathlist.remove(p)
@@ -75,7 +75,6 @@ def get_all_app_modules(app_module):
                 stop = True
                 break
         if stop: continue
-
         pyfiles = prune_blacklisted(glob('%s/*.py' %root))
         paths.extend(pyfiles)
         modules.extend(modules_from_pyfiles(root, pyfiles))
