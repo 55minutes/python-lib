@@ -41,7 +41,7 @@ TOP = """\
         color:green;
       }
       #content-header span.warning {
-        color:yellow;
+        color:#ffcc00;
       }
       #content-header span.critical {
         color:red;

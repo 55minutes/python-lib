@@ -49,7 +49,7 @@ TOP = """\
         color:green;
       }
       #result-list .warning {
-        color:yellow;
+        color:#ffcc00;
       }
       #result-list .critical {
         color:red;
