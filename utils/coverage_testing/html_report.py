@@ -73,7 +73,7 @@ def html_report(modules, outdir):
     """
     outdir = os.path.abspath(outdir)
     modules = list(modules)
-    modules.sort(key=lambda x: x.__name__)
+    modules.sort(lambda x,y: cmp(x.__name__, y.__name__))
 
     test_timestamp = time.strftime('%a %Y-%m-%d %H:%M %Z')
 
@@ -156,7 +156,7 @@ def html_module_report(module, filename, nav=None):
 
     m_vars.source_lines = source_lines = list()
     for i, source_line in enumerate(
-        l.rstrip() for l in file(m_vars.source_file, 'rb').readlines()):
+        [l.rstrip() for l in file(m_vars.source_file, 'rb').readlines()]):
         line_status = 'normal'
         if i+1 in m_vars.executed: line_status = 'executed'
         if i+1 in m_vars.excluded: line_status = 'excluded'
