@@ -91,7 +91,7 @@ TOP = """\
         
       #source-listing ol code 
       {
-        padding:  0;
+        padding:  0 .001em 0 0; /* Firefox doesn't render empty li's properly */
         font-size: medium;
         white-space: pre;
       }
