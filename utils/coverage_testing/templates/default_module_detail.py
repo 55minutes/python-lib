@@ -3,7 +3,7 @@ TOP = """\
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
-    <title>Code coverage report: %(title)s</title>
+    <title>Test coverage report: %(title)s</title>
     <style type="text/css" media="screen">
       a
       {
