@@ -24,14 +24,15 @@ class ModuleVars(object):
 
     def _init(self, module):
         module_name = module.__name__
-        source_file, stmts, excluded, missing, missing_display = coverage.analysis2(module)
-        executed = list(set(stmts).difference(missing))
+        source_file, stmts, excluded, missed, missed_display = coverage.analysis2(module)
+        executed = list(set(stmts).difference(missed))
         total = list(set(stmts).union(excluded))
         total.sort()
         title = module.__name__
         total_count = len(total)
         executed_count = len(executed)
         excluded_count = len(excluded)
+        missed_count = len(missed)
         percent_covered = float(len(executed))/len(stmts)*100
         test_timestamp = time.strftime('%a %Y-%m-%d %H:%M %Z')
         severity = 'normal'
@@ -133,6 +134,7 @@ def html_module_report(module, filename, nav=None):
     total_count %d
     executed_count %d
     excluded_count %d
+    ignored_count %d
     percent_covered %0.1f
     test_timestamp %s
 
@@ -148,7 +150,7 @@ def html_module_report(module, filename, nav=None):
 
     line_status
     ===========
-    normal, executed, missed, excluded
+    ignored, executed, missed, excluded
     """
     if not nav:
         nav = {}
@@ -157,11 +159,12 @@ def html_module_report(module, filename, nav=None):
     m_vars.source_lines = source_lines = list()
     for i, source_line in enumerate(
         [l.rstrip() for l in file(m_vars.source_file, 'rb').readlines()]):
-        line_status = 'normal'
+        line_status = 'ignored'
         if i+1 in m_vars.executed: line_status = 'executed'
         if i+1 in m_vars.excluded: line_status = 'excluded'
-        if i+1 in m_vars.missing: line_status = 'missed'
+        if i+1 in m_vars.missed: line_status = 'missed'
         source_lines.append(module_detail.SOURCE_LINE %vars())
+    m_vars.ignored_count = i+1 - m_vars.total_count
     m_vars.source_lines = os.linesep.join(source_lines)
 
     if 'prev_link' in nav and 'next_link' in nav:

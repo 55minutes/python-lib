@@ -27,9 +27,26 @@ TOP = """\
         margin-left: 50px;
       }
 
-      .module_name 
+      .ignored
       {
-        font-size: 16px;
+        color: #707070;
+      }
+
+      .executed 
+      {
+        color: #3d9900;
+      }
+
+      .missed 
+      {
+        color: red;
+        font-weight: bold;
+      }
+
+      .excluded 
+      {
+        color: #6090f0;
+        font-weight: lighter;
       }
     
       #content-header 
@@ -40,32 +57,34 @@ TOP = """\
 
       #content-header h1 
       {
+        font-size: 16px;
         margin: 10px 0 0 0;
+        color: #909090;
+      }
+      
+      #module-name
+      {
         color: #583707;
       }
     
-      #content-header p 
+      #content-header p
       {
+        font-size: 13px;
         margin: 0;
         color: #909090;
       }
 
-      #content-header span 
-      {
-        font-weight: bold;
-      }
-      
-      #content-header span.normal 
+      #content-header .normal 
       {
         color: #609030;
       }
 
-      #content-header span.warning 
+      #content-header .warning 
       {
         color: #d0a000;
       }
 
-      #content-header span.critical 
+      #content-header .critical 
       {
         color: red;
       }
@@ -94,28 +113,6 @@ TOP = """\
         padding:  0 .001em 0 0; /* Firefox doesn't render empty li's properly */
         font-size: medium;
         white-space: pre;
-      }
-      
-      #source-listing li.normal 
-      {
-        color: #707070;
-      }
-
-      #source-listing li.executed 
-      {
-        color: #609030;
-      }
-
-      #source-listing li.missed 
-      {
-        color: red;
-        font-weight: bold;
-      }
-
-      #source-listing li.excluded 
-      {
-        color: #6090f0;
-        font-weight: lighter;
       }
    </style>
   </head>
@@ -147,12 +144,20 @@ NAV_NO_NEXT = """\
 
 CONTENT_HEADER = """\
 <div id="content-header">
-  <h1 class="module_name">%(title)s</h1>
-  <p>Source file: <span>%(source_file)s</span></p>
-  <p>Stats: <span>%(total_count)d lines, %(executed_count)d executed, 
-  %(excluded_count)d excluded: <span 
-  class="%(severity)s">%(percent_covered)0.1f%% covered</span></span></p> 
-  <p>Generated: <span>%(test_timestamp)s</span></p>
+  <h1>
+    <span id="module-name">%(title)s</span>:
+    %(total_count)d total statements,
+    <span class="%(severity)s">%(percent_covered)0.1f%% covered</span>
+  </h1>
+  <p>Generated: %(test_timestamp)s</p>
+  <p>Source file: %(source_file)s</p>
+  <p>
+    Stats:
+    <span class="executed">%(executed_count)d executed</span>,
+    <span class="missed">%(missed_count)d missed</span>,
+    <span class="excluded">%(excluded_count)d excluded</span>,
+    <span class="ignored">%(ignored_count)d ignored</span> 
+  </p> 
 </div>
 """
 

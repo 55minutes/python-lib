@@ -50,12 +50,12 @@ TOP = """\
       }
 
       #result-list thead tr.last th,
-      th.lines-of-code
+      th.statements
       {
         border-bottom: 1px solid #6d5e48;
       }
       
-      th.lines-of-code
+      th.statements
       {
         text-align: center;
       }
@@ -119,7 +119,7 @@ CONTENT_BODY = """\
     <thead>
       <tr>
         <th>&nbsp;</th>
-        <th colspan="3" class="lines-of-code">Lines of code</th>
+        <th colspan="3" class="statements">Statements</th>
       </tr>
       <tr class="last">
         <th class="module-name">Module</th>
