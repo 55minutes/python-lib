@@ -106,10 +106,10 @@ def html_report(modules, outdir):
     module_stats = list()
     for module in modules[:]:
         m_vars = ModuleVars(module)
+        m_vars.module_link = os.path.join(m_subdirname, m_vars.module_name + '.html')
         if not m_vars.total_count:
             modules.remove(module)
             continue
-        m_vars.module_link = os.path.join(m_subdirname, m_vars.module_name + '.html')
         module_stats.append(module_index.MODULE_STAT %m_vars.__dict__)
         total_lines += m_vars.total_count
         total_executed += m_vars.executed_count
@@ -123,11 +123,11 @@ def html_report(modules, outdir):
         m_vars = ModuleVars(module)
         nav = dict(up_link=os.path.join('..', 'index.html'),
                    up_label='index')
-        if i != 0:
+        if i > 0:
             m = ModuleVars(modules[i-1])
             nav['prev_link'] = os.path.basename(m.module_link)
             nav['prev_label'] = m.module_name
-        if i+1 != len(modules):
+        if i+1 < len(modules):
             m = ModuleVars(modules[i+1])
             nav['next_link'] = os.path.basename(m.module_link)
             nav['next_label'] = m.module_name
