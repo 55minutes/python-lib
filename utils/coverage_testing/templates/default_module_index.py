@@ -129,9 +129,6 @@ CONTENT_BODY = """\
         <th>%% covered</th>
       </tr>
     </thead>
-    <tbody>
-      %(module_stats)s
-    </tbody>
     <tfoot>
       <tr>
         <td class="module-name">Total</td>
@@ -141,6 +138,9 @@ CONTENT_BODY = """\
         <td>%(overall_covered)0.1f%%</td>
       </tr>
     </tfoot>
+    <tbody>
+      %(module_stats)s
+    </tbody>
   </table>
 </div>
 """
