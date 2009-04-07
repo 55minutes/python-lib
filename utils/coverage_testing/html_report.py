@@ -104,8 +104,11 @@ def html_report(modules, outdir):
     total_excluded = 0
     total_stmts = 0
     module_stats = list()
-    for module in modules:
+    for module in modules[:]:
         m_vars = ModuleVars(module)
+        if not m_vars.total_count:
+            modules.remove(module)
+            continue
         m_vars.module_link = os.path.join(m_subdirname, m_vars.module_name + '.html')
         module_stats.append(module_index.MODULE_STAT %m_vars.__dict__)
         total_lines += m_vars.total_count
