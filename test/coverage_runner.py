@@ -15,7 +15,7 @@ except:
 
 
 RE_BLACKLIST = list()
-for expr in getattr(settings, 'COVERAGE_TEST_PATH_BLACKLIST', []):
+for expr in getattr(settings, 'COVERAGE_TEST_PATH_BLACKLIST', None) or []:
     RE_BLACKLIST.append(re.compile(expr))
 
 def modules_from_pyfiles(root, pyfiles):
@@ -25,22 +25,36 @@ def modules_from_pyfiles(root, pyfiles):
     sys_path.sort()
     sys_path.reverse()
     test_module = os.path.basename(pyfiles[0])[:-3]
+    package = None
     for p in [p for p in sys_path if root.startswith(p)]:
         package = root.replace(p, '')
         package = '.'.join([e for e in package.split(os.path.sep) if e])
-        try:
-            module = __import__('.'.join([package,test_module]))
+        m_path = '.'.join([package,test_module])
+        if m_path in sys.modules:
             break
-        except (ImportError, AlreadyRegistered):
+        else:
             package = None
+    if not package:
+        for p in [p for p in sys_path if root.startswith(p)]:
+            package = root.replace(p, '')
+            package = '.'.join([e for e in package.split(os.path.sep) if e])
+            try:
+                module = __import__('.'.join([package,test_module]))
+                break
+            except:
+                package = None
+
     if package:
         for m_name in [os.path.basename(f)[:-3] for f in pyfiles]:
-            m_fullname = '.'.join([package, m_name])
+            m_path = '.'.join([package, m_name])
             f, fn, desc = imp.find_module(m_name, [root])
+            if m_path in sys.modules:
+                yield sys.modules[m_path]
+                continue
             try:
-                yield imp.load_module(m_fullname, f, fn, desc)
-            except AlreadyRegistered:
-                pass # This is a Django admin definition module
+                yield imp.load_module(m_path, f, fn, desc)
+            except:
+                pass
 
 def prune_blacklisted(pathlist):
     for p in pathlist[:]:
@@ -65,9 +79,13 @@ def get_all_app_modules(app_module):
     except AttributeError:
         app_dirpath = os.path.split(app_module.__file__)[0]
 
+    return get_all_modules_from_path(app_dirpath)
+
+def get_all_modules_from_path(path):
+    path = os.path.abspath(path)
     modules = list()
     paths = list()
-    for root, dirs, files in os.walk(app_dirpath):
+    for root, dirs, files in os.walk(path):
         dirs = prune_dirs(root, dirs)
         stop = False
         for r in RE_BLACKLIST:
@@ -87,7 +105,7 @@ def run_tests(test_labels, verbosity=1, interactive=True,
     run.
     """
     coverage.use_cache(0)
-    for e in getattr(settings, 'COVERAGE_TEST_EXCLUDES', []):
+    for e in getattr(settings, 'COVERAGE_TEST_EXCLUDES', None) or []:
         coverage.exclude(e)
     coverage.start()
     results = base_run_tests(test_labels, verbosity, interactive, extra_tests)
@@ -108,12 +126,20 @@ def run_tests(test_labels, verbosity=1, interactive=True,
             coverage_paths.update(p)
             coverage_modules.update(m)
 
-    if getattr(settings, 'COVERAGE_TEST_LIST_STYLE', '').lower() == 'path' and coverage_paths:
+    for path in getattr(settings, 'COVERAGE_TEST_ADDITIONAL_PATHS', None) or []:
+        p, m = get_all_modules_from_path(os.path.abspath(path))
+        coverage_paths.update(p)
+        coverage_modules.update(m)
+
+    list_style = getattr(settings, 'COVERAGE_TEST_LIST_STYLE', None) or ''
+
+    if list_style.lower() == 'path' and coverage_paths:
         coverage.report(list(coverage_paths), show_missing=1)
     elif coverage_modules:
         coverage.report(list(coverage_modules), show_missing=1)
 
-    outdir = os.path.abspath(getattr(settings, 'COVERAGE_TEST_HTML_OUTPUT_DIR', 'test_html'))
+    outdir = getattr(settings, 'COVERAGE_TEST_HTML_OUTPUT_DIR', None) or 'test_html'
+    outdir = os.path.abspath(outdir)
     html_report(coverage_modules, outdir)
     print >>sys.stdout
     print >>sys.stdout, "HTML reports were output to '%s'" %outdir

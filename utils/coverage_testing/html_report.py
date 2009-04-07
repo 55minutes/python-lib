@@ -33,7 +33,10 @@ class ModuleVars(object):
         executed_count = len(executed)
         excluded_count = len(excluded)
         missed_count = len(missed)
-        percent_covered = float(len(executed))/len(stmts)*100
+        try:
+            percent_covered = float(len(executed))/len(stmts)*100
+        except ZeroDivisionError:
+            percent_covered = 100
         test_timestamp = time.strftime('%a %Y-%m-%d %H:%M %Z')
         severity = 'normal'
         if percent_covered < 75: severity = 'warning'
@@ -112,6 +115,7 @@ def html_report(modules, outdir):
     module_stats = os.linesep.join(module_stats)
     overall_covered = float(total_executed)/total_stmts*100
 
+    i = 0
     for i, module in enumerate(modules):
         m_vars = ModuleVars(module)
         nav = dict(up_link=os.path.join('..', 'index.html'),
@@ -175,6 +179,7 @@ def html_module_report(module, filename, nav=None):
     m_vars = ModuleVars(module)
 
     m_vars.source_lines = source_lines = list()
+    i = 0
     for i, source_line in enumerate(
         [l.rstrip() for l in file(m_vars.source_file, 'rb').readlines()]):
         line_status = 'ignored'
