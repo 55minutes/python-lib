@@ -6,7 +6,7 @@ from django.contrib.admin.sites import AlreadyRegistered
 from django.db.models import get_app, get_apps
 from django.test.simple import run_tests as base_run_tests
 
-from utils.coverage_testing import html_report
+from utils.coverage_report import html_report
 
 try:
     set
