@@ -12,18 +12,16 @@ __all__ = ('html_report','html_module_report')
 
 class ModuleVars(object):
     modules = dict()
-    def __new__(cls, *args, **kwargs):
-        module = args[0]
-        if cls.modules.get(module.__name__, None):
-            return cls.modules.get(module.__name__)
+    def __new__(cls, module_name, module=None):
+        if cls.modules.get(module_name, None):
+            return cls.modules.get(module_name)
         else:
             obj=super(ModuleVars, cls).__new__(cls)
-            obj._init(module)
-            cls.modules[module.__name__] = obj
+            obj._init(module_name, module)
+            cls.modules[module_name] = obj
             return obj
 
-    def _init(self, module):
-        module_name = module.__name__
+    def _init(self, module_name, module):
         source_file, stmts, excluded, missed, missed_display = coverage.analysis2(module)
         executed = list(set(stmts).difference(missed))
         total = list(set(stmts).union(excluded))
@@ -87,11 +85,7 @@ def html_report(modules, outdir):
     """
     # TODO: More robust directory checking and creation
     outdir = os.path.abspath(outdir)
-    modules = list(modules)
-    modules.sort(lambda x,y: cmp(x.__name__, y.__name__))
-
     test_timestamp = time.strftime('%a %Y-%m-%d %H:%M %Z')
-
     m_subdirname = 'modules'
     m_dir = os.path.join(outdir, m_subdirname)
     try:
@@ -104,11 +98,13 @@ def html_report(modules, outdir):
     total_excluded = 0
     total_stmts = 0
     module_stats = list()
-    for module in modules[:]:
-        m_vars = ModuleVars(module)
+    m_names = modules.keys()
+    m_names.sort()
+    for n in m_names:
+        m_vars = ModuleVars(n, modules[n])
         m_vars.module_link = os.path.join(m_subdirname, m_vars.module_name + '.html')
         if not m_vars.total_count:
-            modules.remove(module)
+            del modules[n]
             continue
         module_stats.append(module_index.MODULE_STAT %m_vars.__dict__)
         total_lines += m_vars.total_count
@@ -119,20 +115,20 @@ def html_report(modules, outdir):
     overall_covered = float(total_executed)/total_stmts*100
 
     i = 0
-    for i, module in enumerate(modules):
-        m_vars = ModuleVars(module)
+    for i, n in enumerate(m_names):
+        m_vars = ModuleVars(n)
         nav = dict(up_link=os.path.join('..', 'index.html'),
                    up_label='index')
         if i > 0:
-            m = ModuleVars(modules[i-1])
+            m = ModuleVars(m_names[i-1])
             nav['prev_link'] = os.path.basename(m.module_link)
             nav['prev_label'] = m.module_name
         if i+1 < len(modules):
-            m = ModuleVars(modules[i+1])
+            m = ModuleVars(m_names[i+1])
             nav['next_link'] = os.path.basename(m.module_link)
             nav['next_label'] = m.module_name
         html_module_report(
-            module, os.path.join(m_dir, m_vars.module_name + '.html'), nav)
+            n, os.path.join(m_dir, m_vars.module_name + '.html'), nav)
 
     fo = file(os.path.join(outdir, 'index.html'), 'wb+')
     print >>fo, module_index.TOP
@@ -141,7 +137,7 @@ def html_report(modules, outdir):
     print >>fo, module_index.BOTTOM
     fo.close()
 
-def html_module_report(module, filename, nav=None):
+def html_module_report(module_name, filename, nav=None):
     """
     Creates a module detail report based on coverage testing at the specified
     filename. If ``nav`` is specified, the nav template will be used as well.
@@ -179,7 +175,7 @@ def html_module_report(module, filename, nav=None):
     """
     if not nav:
         nav = {}
-    m_vars = ModuleVars(module)
+    m_vars = ModuleVars(module_name)
 
     m_vars.source_lines = source_lines = list()
     i = 0
