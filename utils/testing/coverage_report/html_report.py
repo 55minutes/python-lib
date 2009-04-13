@@ -1,4 +1,5 @@
 import os, time
+from urllib import pathname2url as p2url
 
 from data_storage import ModuleVars
 from html_module_detail import html_module_detail
@@ -78,7 +79,7 @@ def html_report(outdir, modules, excludes=None, errors=None):
             excludes.append(m_vars.module_name)
             del modules[n]
             continue
-        m_vars.module_link = os.path.join(m_subdirname, m_vars.module_name + '.html')
+        m_vars.module_link = p2url(os.path.join(m_subdirname, m_vars.module_name + '.html'))
         module_stats.append(module_index.MODULE_STAT %m_vars.__dict__)
         total_lines += m_vars.total_count
         total_executed += m_vars.executed_count
@@ -92,7 +93,7 @@ def html_report(outdir, modules, excludes=None, errors=None):
     i = 0
     for i, n in enumerate(m_names):
         m_vars = ModuleVars(n)
-        nav = dict(up_link=os.path.join('..', 'index.html'),
+        nav = dict(up_link=p2url(os.path.join('..', 'index.html')),
                    up_label='index')
         if i > 0:
             m = ModuleVars(m_names[i-1])
