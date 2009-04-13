@@ -31,6 +31,7 @@ def html_module_errors(filename, errors):
                     * ``%(module_name)s``
     """
     long_desc = """\
-    Module tools had problems importing these packages and modules.
+    <code>test_coverage.utils.module_tools.find_or_load_module</code> had
+    problems importing these packages and modules:
     """
     html_module_exceptions(filename, errors, module_errors, long_desc)

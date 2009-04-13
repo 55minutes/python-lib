@@ -32,6 +32,7 @@ def html_module_excludes(filename, excludes):
     """
     long_desc = """\
     These packages and modules were excluded from the coverage analysis in 
-    the setting <code>COVERAGE_MODULE_EXCLUDES</code>. 
+    <code>django.conf.settings.COVERAGE_MODULE_EXCLUDES</code> or they do
+    not contain any executable statements:
     """
     html_module_exceptions(filename, excludes, module_excludes, long_desc)

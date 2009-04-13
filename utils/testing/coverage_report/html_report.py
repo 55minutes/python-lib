@@ -74,10 +74,11 @@ def html_report(outdir, modules, excludes=None, errors=None):
     m_names.sort()
     for n in m_names:
         m_vars = ModuleVars(n, modules[n])
-        m_vars.module_link = os.path.join(m_subdirname, m_vars.module_name + '.html')
         if not m_vars.total_count:
+            excludes.append(m_vars.module_name)
             del modules[n]
             continue
+        m_vars.module_link = os.path.join(m_subdirname, m_vars.module_name + '.html')
         module_stats.append(module_index.MODULE_STAT %m_vars.__dict__)
         total_lines += m_vars.total_count
         total_executed += m_vars.executed_count
@@ -86,6 +87,8 @@ def html_report(outdir, modules, excludes=None, errors=None):
     module_stats = os.linesep.join(module_stats)
     overall_covered = float(total_executed)/total_stmts*100
 
+    m_names = modules.keys()
+    m_names.sort()
     i = 0
     for i, n in enumerate(m_names):
         m_vars = ModuleVars(n)

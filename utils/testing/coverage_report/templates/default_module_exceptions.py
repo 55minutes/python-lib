@@ -35,7 +35,7 @@ TOP = """\
       
       #result-list
       {
-        margin-left: 50px;
+        margin: 0 50px;
       }
       
       #result-list ul
