@@ -100,6 +100,11 @@ TOP = """\
       {
         text-align: left;
       }
+      
+      .footer-link
+      {
+        margin-left: 62px;
+      }
    </style>
   </head>
 
@@ -153,6 +158,14 @@ MODULE_STAT = """\
   <td>%(excluded_count)d</td>
   <td class="%(severity)s">%(percent_covered)0.1f%%</td>
 </tr>
+"""
+
+EXCEPTIONS_LINK = """\
+<div>
+  <a class="footer-link" href="%(exceptions_link)s">
+    %(exception_desc)s
+  </a>
+</div>
 """
 
 BOTTOM = """\

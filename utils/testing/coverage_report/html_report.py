@@ -1,50 +1,12 @@
-import cgi, coverage, os, time
+import os, time
 
-from templates import default_module_detail as module_detail
+from data_storage import ModuleVars
+from html_module_detail import html_module_detail
+from html_module_errors import html_module_errors
+from html_module_excludes import html_module_excludes
 from templates import default_module_index as module_index
 
-try:
-    set
-except:
-    from sets import Set as set
-
-__all__ = ('html_report','html_module_report')
-
-class ModuleVars(object):
-    modules = dict()
-    def __new__(cls, module_name, module=None):
-        if cls.modules.get(module_name, None):
-            return cls.modules.get(module_name)
-        else:
-            obj=super(ModuleVars, cls).__new__(cls)
-            obj._init(module_name, module)
-            cls.modules[module_name] = obj
-            return obj
-
-    def _init(self, module_name, module):
-        source_file, stmts, excluded, missed, missed_display = coverage.analysis2(module)
-        executed = list(set(stmts).difference(missed))
-        total = list(set(stmts).union(excluded))
-        total.sort()
-        title = module.__name__
-        total_count = len(total)
-        executed_count = len(executed)
-        excluded_count = len(excluded)
-        missed_count = len(missed)
-        try:
-            percent_covered = float(len(executed))/len(stmts)*100
-        except ZeroDivisionError:
-            percent_covered = 100
-        test_timestamp = time.strftime('%a %Y-%m-%d %H:%M %Z')
-        severity = 'normal'
-        if percent_covered < 75: severity = 'warning'
-        if percent_covered < 50: severity = 'critical'
-
-        for k, v in locals().iteritems():
-            setattr(self, k, v)
-
-
-def html_report(modules, outdir):
+def html_report(outdir, modules, excludes=None, errors=None):
     """
     Creates an ``index.html`` in the specified ``outdir``. Also attempts to create
     a ``modules`` subdirectory to create module detail html pages, which are named
@@ -69,6 +31,16 @@ def html_report(modules, outdir):
                   * ``%(total_executed)d``
                   * ``%(total_excluded)d``
                   * ``%(overall_covered)0.1f``
+
+    EXCEPTIONS_LINK: Link to the excludes and errors index page which shows
+                     packages and modules which were not part of the coverage
+                     analysis. Requires the following variable:
+                     * ``%(exceptions_link)s`` Link to the index page.
+                     * ``%(exceptions_desc)s`` Describe the exception.
+
+    ERRORS_LINK: Link to the errors index page which shows packages and modules which
+                 had problems being imported. Requires the following variable:
+                 * ``%(errors_link)s`` Link to the index page.
 
     BOTTOM: Just a closing ``</body></html>``
 
@@ -127,82 +99,24 @@ def html_report(modules, outdir):
             m = ModuleVars(m_names[i+1])
             nav['next_link'] = os.path.basename(m.module_link)
             nav['next_label'] = m.module_name
-        html_module_report(
-            n, os.path.join(m_dir, m_vars.module_name + '.html'), nav)
+        html_module_detail(
+            os.path.join(m_dir, m_vars.module_name + '.html'), n, nav)
 
     fo = file(os.path.join(outdir, 'index.html'), 'wb+')
     print >>fo, module_index.TOP
     print >>fo, module_index.CONTENT_HEADER %vars()
     print >>fo, module_index.CONTENT_BODY %vars()
+    if excludes:
+        _file = 'excludes.html'
+        exceptions_link = _file
+        exception_desc = "Excluded packages and modules"
+        print >>fo, module_index.EXCEPTIONS_LINK %vars()
+        html_module_excludes(os.path.join(outdir, _file), excludes)
+    if errors:
+        _file = 'errors.html'
+        exceptions_link = _file
+        exception_desc = "Error packages and modules"
+        print >>fo, module_index.EXCEPTIONS_LINK %vars()
+        html_module_errors(os.path.join(outdir, _file), errors)
     print >>fo, module_index.BOTTOM
-    fo.close()
-
-def html_module_report(module_name, filename, nav=None):
-    """
-    Creates a module detail report based on coverage testing at the specified
-    filename. If ``nav`` is specified, the nav template will be used as well.
-
-    It uses `templates.default_module_detail` to create the page. The template
-    contains the following sections which need to be rendered and assembled into
-    the final HTML.
-
-    TOP: Contains the HTML declaration and head information, as well as the
-         inline stylesheet. It requires the following variable:
-         * %(title)s The module name is probably fitting for this.
-
-    CONTENT_HEADER: The header portion of the body. Requires the following variable:
-                    * %(title)s
-                    * %(source_file)s File path to the module
-                    * %(total_count)d
-                    * %(executed_count)d
-                    * %(excluded_count)d
-                    * %(ignored_count)d
-                    * %(percent_covered)0.1f
-                    * %(test_timestamp)s
-
-    CONTENT_BODY: Annotated module source code listing. Requires the following variable:
-                  * ``%(source_lines)s`` The actual source listing which is generated by
-                    looping through each line and concatenanting together rendered
-                    ``SOURCE_LINE`` template (see below).
-
-    BOTTOM: Just a closing ``</body></html>``
-
-    SOURCE_LINE: Used to assemble the content of ``%(source_lines)s`` for ``CONTENT_BODY``.
-                 Requires the following variables:
-                 * ``%(line_status)s`` (ignored, executed, missed, excluded) used as CSS class
-                   identifier to style the each source line.
-                 * ``%(source_line)s``
-    """
-    if not nav:
-        nav = {}
-    m_vars = ModuleVars(module_name)
-
-    m_vars.source_lines = source_lines = list()
-    i = 0
-    for i, source_line in enumerate(
-        [l.rstrip() for l in file(m_vars.source_file, 'rb').readlines()]):
-        line_status = 'ignored'
-        if i+1 in m_vars.executed: line_status = 'executed'
-        if i+1 in m_vars.excluded: line_status = 'excluded'
-        if i+1 in m_vars.missed: line_status = 'missed'
-        source_lines.append(module_detail.SOURCE_LINE %vars())
-    m_vars.ignored_count = i+1 - m_vars.total_count
-    m_vars.source_lines = os.linesep.join(source_lines)
-
-    if 'prev_link' in nav and 'next_link' in nav:
-        nav_html = module_detail.NAV %nav
-    elif 'prev_link' in nav:
-        nav_html = module_detail.NAV_NO_NEXT %nav
-    elif 'next_link' in nav:
-        nav_html = module_detail.NAV_NO_PREV %nav
-            
-    fo = file(filename, 'wb+')
-    print >>fo, module_detail.TOP %m_vars.__dict__
-    if nav:
-        print >>fo, nav_html
-    print >>fo, module_detail.CONTENT_HEADER %m_vars.__dict__
-    print >>fo, module_detail.CONTENT_BODY %m_vars.__dict__
-    if nav:
-        print >>fo, nav_html
-    print >>fo, module_detail.BOTTOM
     fo.close()
