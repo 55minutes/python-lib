@@ -1,4 +1,4 @@
-import os
+import cgi, os
 
 from data_storage import ModuleVars
 from templates import default_module_detail as module_detail
@@ -46,7 +46,7 @@ def html_module_detail(filename, module_name, nav=None):
     m_vars.source_lines = source_lines = list()
     i = 0
     for i, source_line in enumerate(
-        [l.rstrip() for l in file(m_vars.source_file, 'rb').readlines()]):
+        [cgi.escape(l.rstrip()) for l in file(m_vars.source_file, 'rb').readlines()]):
         line_status = 'ignored'
         if i+1 in m_vars.executed: line_status = 'executed'
         if i+1 in m_vars.excluded: line_status = 'excluded'
