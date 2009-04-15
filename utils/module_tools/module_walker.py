@@ -115,4 +115,4 @@ def get_all_modules(whitelist, blacklist=None, exclude_dirs=None):
         _get_all_packages(pkg_name, pkg, blacklist, exclude_dirs)
     for pkg_name, pkg in packages.copy().iteritems():
         _get_all_modules(pkg_name, pkg, blacklist)
-    return packages, modules, excluded, errors
+    return packages, modules, list(set(excluded)), list(set(errors))
