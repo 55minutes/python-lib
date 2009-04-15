@@ -34,3 +34,5 @@ class Luhn(CreditCardValidators):
             alt = not alt
         if not (_sum % 10) == 0:
             raise cls.error("Invalid credit card number")
+
+# TODO: http://en.wikipedia.org/wiki/Credit_card_numbers
