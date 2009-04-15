@@ -1,5 +1,12 @@
 from fiftyfive.metaclass import PluginMount
 
+try:
+    reversed
+except:
+    def reversed(data):
+        for index in xrange(len(data)-1, -1, -1):
+            yield data[index]
+
 __all__ = ('CreditCardValidators',)
 
 class CreditCardValidationError(Exception):
