@@ -19,6 +19,8 @@ class ModuleVars(object):
 
     def _init(self, module_name, module):
         source_file, stmts, excluded, missed, missed_display = coverage.analysis2(module)
+        if source_file.endswith('.pyc'):
+            source_file = source_file[:-1]
         executed = list(set(stmts).difference(missed))
         total = list(set(stmts).union(excluded))
         total.sort()
