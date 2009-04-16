@@ -1,3 +1,5 @@
+__credit__ = "Based on http://www.djangosnippets.org/snippets/85/"
+
 from django.conf import settings
 from django.http import HttpResponsePermanentRedirect
 
