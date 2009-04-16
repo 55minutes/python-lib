@@ -1,27 +1,28 @@
-from urlparse import urlunparse
+from django.conf import settings
+from django.http import HttpResponsePermanentRedirect
 
-from django.http import HttpResponseRedirect
+__all__ = ('HttpsRedirect',)
+
+SSL = 'SSL'
 
 class HttpsRedirect(object):
     def process_view(self, request, view_func, view_args, view_kwargs):
-        if getattr(view_func, '_https_only', False) and not request.is_secure():
-            url = urlunparse(('https', request.get_host(),
-                              request.get_full_path(), '', '', ''))
-            return HttpResponseRedirect(url)
-        else:
-            return
+        secure = view_kwargs.pop(SSL, False)
+        if secure != self.is_secure(request) and self.has_ssl():
+            protocol = secure and "https" or "http"
+            return self.redirect(protocol, request)
 
-class HttpRedirect(object):
-    def process_view(self, request, view_func, view_args, view_kwargs):
-        if view_func.__module__.startswith('django.contrib'):
-            return
-        if not getattr(view_func, '_https_only', False) and request.is_secure():
-            url = urlunparse(('http', request.get_host(),
-                              request.get_full_path(), '', '', ''))
-            return HttpResponseRedirect(url)
-        else:
-            return
+    def has_ssl(self):
+        return getattr(settings, 'SSL_ENABLED', False)
 
-def https_only(view_func):
-    setattr(view_func, '_https_only', True)
-    return view_func
+    def is_secure(self, request):
+        #Handle the Webfaction case until this gets resolved in the request.is_secure()
+        if 'HTTP_X_FORWARDED_SSL' in request.META:
+            return request.META['HTTP_X_FORWARDED_SSL'] == 'on'
+        else:
+            return request.is_secure()
+
+    def redirect(self, protocol, request):
+        url = "%s://%s%s" % (
+            protocol, request.get_host(), request.get_full_path())
+        return HttpResponsePermanentRedirect(url)
