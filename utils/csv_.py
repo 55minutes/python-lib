@@ -1,4 +1,4 @@
-import csv, codecs, cStringIO
+import csv, codecs, StringIO
 
 class UTF8Recoder:
     """
@@ -38,7 +38,7 @@ class UnicodeWriter:
 
     def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
         # Redirect output to a queue
-        self.queue = cStringIO.StringIO()
+        self.queue = StringIO.StringIO()
         self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
         self.stream = f
         self.encoder = codecs.getencoder(encoding)
@@ -52,7 +52,7 @@ class UnicodeWriter:
         data, length = self.encoder(data)
         # write to the target stream
         self.stream.write(data)
-        # empty queue
+        # reinitialize the queue
         self.queue.truncate(0)
 
     def writerows(self, rows):
