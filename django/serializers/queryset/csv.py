@@ -18,10 +18,9 @@ class Serializer(python.Serializer):
 
     def write_header(self):
         header = []
-        r1 = self.objects[0]
-        header.append(self.get_string_value('%s:pk' %r1['model']))
-        for k in r1['fields']:
-            header.append(self.get_string_value(k))
+        header.append(self.get_string_value('%s:pk' %self.get_string_value(self.queryset.model._meta)))
+        for f in self.fields:
+            header.append(self.get_string_value(f))
         self.output.writerow(header)
 
     def write_rows(self):

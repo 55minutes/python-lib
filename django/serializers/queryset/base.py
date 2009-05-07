@@ -31,6 +31,7 @@ class Serializer(DjangoBaseSerializer):
         self.converters = options.get('converters',
                                       settings.SERIALIZATION_CONVERTERS)
 
+        self.fields_lookup()
         self.start_serialization()
         for obj in queryset:
             self.start_object(obj)
@@ -48,6 +49,21 @@ class Serializer(DjangoBaseSerializer):
             self.end_object(obj)
         self.end_serialization()
         return self.getvalue()
+
+    def fields_lookup(self):
+        self.fields = []
+        model = self.queryset.model
+        for field in [f for f in model._meta.fields if self.include_field(f)]:
+            if field.rel is None:
+                self.fields.append(field.attname)
+            else:
+                self.fields.append(field.attname[:-3])
+        for field in [f for f in model._meta.many_to_many if self.include_field(f)]:
+            self.fields.append(field.attname)
+        for field in [f for f in self.queryset.query.extra if self.include_field(f)]:
+            self.fields.append(field)
+        for field in [f for f in self.queryset.query.aggregates if self.include_field(f)]:
+            self.fields.append(field)
 
     def get_string_value(self, value):
         """
