@@ -54,23 +54,57 @@ class UnicodeReader(ReaderInterface):
         return self
 
 
-class UnicodeDictReader(csv.DictReader):
+class UnicodeDictReader:
     """
     A CSV reader which will iterate over lines in the CSV file "f",
     which is encoded in the given encoding.
     """
-
+    
     def __init__(self, f, fieldnames=None, restkey=None, restval=None,
-                 dialect=csv.excel, encoding="utf-8", *args, **kwds):
-        f = UTF8Recoder(f, encoding)
-        csv.DictReader.__init__(self, f, fieldnames=fieldnames,
-                                restkey=restkey, restval=restval,
-                                dialect=dialect, *args, **kwds)
+                 dialect="excel", encoding="utf-8", *args, **kwds):
+        self._fieldnames = fieldnames   # list of keys for the dict
+        self.restkey = restkey          # key to catch long rows
+        self.restval = restval          # default value for short rows
+        self.reader = UnicodeReader(f, dialect, encoding, *args, **kwds)
+        self.dialect = dialect
+        self.line_num = 0
+
+    def __iter__(self):
+        return self
+
+    def _get_fieldnames(self):
+        if self._fieldnames is None:
+            try:
+                self._fieldnames = self.reader.next()
+            except StopIteration:
+                pass
+        self.line_num = self.reader.line_num
+        return self._fieldnames
+
+    def _set_fieldnames(self, value):
+        self._fieldnames = value
+    fieldnames = property(_get_fieldnames, _set_fieldnames)
 
     def next(self):
-        d = csv.DictReader.next(self)
-        for k, v in d.iteritems():
-            d[unicode(k, 'utf-8')] = unicode(v, 'utf-8')
+        if self.line_num == 0:
+            # Used only for its side effect.
+            self.fieldnames
+        row = self.reader.next()
+        self.line_num = self.reader.line_num
+
+        # unlike the basic reader, we prefer not to return blanks,
+        # because we will typically wind up with a dict full of None
+        # values
+        while row == []:
+            row = self.reader.next()
+        d = dict(zip(self.fieldnames, row))
+        lf = len(self.fieldnames)
+        lr = len(row)
+        if lf < lr:
+            d[self.restkey] = row[lf:]
+        elif lf > lr:
+            for key in self.fieldnames[lr:]:
+                d[key] = self.restval
         return d
 
 
