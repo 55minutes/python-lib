@@ -1,3 +1,6 @@
+import logging
+
+
 class StdIOLogger(object):
     """
     A class that's meant to be substituted in for sys.stdout.
