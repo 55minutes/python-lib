@@ -2,6 +2,8 @@ import csv
 import codecs
 import StringIO
 
+from csv import *
+
 
 class UTF8Recoder:
     """
