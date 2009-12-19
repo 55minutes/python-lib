@@ -1,29 +1,4 @@
-from contextlib import contextmanager, nested
-from functools import wraps
 import logging
-import sys
-
-
-@contextmanager
-def stdio_logger(sys_key, logger, level=logging.INFO):
-    try:
-        saved_io = sys.__dict__[sys_key]
-        sys.__dict__[sys_key] = IOLogger(saved_io, logger, level)
-        yield
-    finally:
-        sys.__dict__[sys_key] = saved_io
-
-
-def log_stdio(logger, level=logging.INFO):
-    def decorate(f):
-        @wraps(f)
-        def wrapper(*args, **kwargs):
-            with nested(stdio_logger('stdin', logger),
-                        stdio_logger('stdout', logger),
-                        stdio_logger('stderr', logger)):
-                f(*args, **kwargs)
-        return wrapper
-    return decorate
 
 
 class IOLogger(object):
