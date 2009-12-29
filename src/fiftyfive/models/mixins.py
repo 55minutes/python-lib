@@ -21,11 +21,11 @@ class DirtyFieldsMixin(models.Model):
           # Django field definitions
           def save(self, force_insert=False, force_update=False):
               # You can do interesting stuff here with self._original_state
-              # and self.dirty_fields
+              # and self._dirty_fields
               super(SomeModel, self).save(force_insert=force_insert,
                                           force_update=force_update)
               # You cand do more interesting sutff with self._original_state
-              # and self.dirty_fields, they haven't changed yet.
+              # and self._dirty_fields, they haven't changed yet.
               # If you want to update self._original_state to reflect the changes,
               # you will have to explicitly call self.update_original_state()
               # either here in the model.save() override, or on the model object
