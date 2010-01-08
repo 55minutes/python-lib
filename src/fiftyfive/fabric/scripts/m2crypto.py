@@ -4,6 +4,8 @@ from tempfile import mkstemp
 from fabric.api import *
 from fiftyfive.fabric.api import *
 
+from deploy import mkvirtualenv, make_remote_tempdir
+
 __all__ = []
 
 
@@ -32,6 +34,9 @@ SWIG_FEATURES=-cpperraswarn python setup.py $*
 """
 @command
 def m2crypto():
+    """
+    Installs m2crypto on Fedora based deployment targets.
+    """
     mkvirtualenv()
     make_remote_tempdir()
     fd, fpath = mkstemp()
