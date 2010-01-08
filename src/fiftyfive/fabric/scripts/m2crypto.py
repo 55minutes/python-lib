@@ -1,4 +1,5 @@
 import os
+from tempfile import mkstemp
 
 from fabric.api import *
 from fiftyfive.fabric.api import *
@@ -37,7 +38,6 @@ def m2crypto():
     of = os.fdopen(fd, 'w')
     of.write(FEDORA_SETUP)
     of.close()
-    print env._remote_tempdir
     with cd(env._remote_tempdir):
         _ve_run('pip install -d . m2crypto')
         tgz_file = run('ls')

@@ -2,7 +2,7 @@ from contextlib import nested
 import glob
 import os
 import re
-from tempfile import mkdtemp, mkstemp
+from tempfile import mkdtemp
 from urlparse import urljoin
 
 from fabric.api import *
