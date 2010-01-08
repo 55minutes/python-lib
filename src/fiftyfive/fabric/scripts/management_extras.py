@@ -1,6 +1,8 @@
 from fabric.api import *
 from fiftyfive.fabric.api import *
 
+from management import _local_or_run
+
 __all__ = []
 
 
