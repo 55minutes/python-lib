@@ -24,8 +24,8 @@ class DirtyFieldsMixin(models.Model):
               # and self._dirty_fields
               super(SomeModel, self).save(force_insert=force_insert,
                                           force_update=force_update)
-              # You cand do more interesting sutff with self._original_state
-              # and self._dirty_fields, they haven't changed yet.
+              # You can do more interesting stuff with self._original_state
+              # and self._dirty_fields, as they haven't changed yet.
               # If you want to update self._original_state to reflect the changes,
               # you will have to explicitly call self.update_original_state()
               # either here in the model.save() override, or on the model object
