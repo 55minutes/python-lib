@@ -82,3 +82,8 @@ def create_update_with_remote_fixtures(dumpdata_func):
                 local('bunzip2 -f %(local_sample)s.bz2' % vars())
         return update_func
     return decorator
+
+
+@command
+def manage(cmd):
+    _ve_run('manage %(cmd)s' % vars())
