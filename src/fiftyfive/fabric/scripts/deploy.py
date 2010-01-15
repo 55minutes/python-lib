@@ -102,12 +102,12 @@ def install_distributions():
 
 
 def upload_setting_overrides():
-    fname = os.path.join(env._tempdir, 'setting_overrides.py')
+    fname = os.path.join(env._tempdir, 'settings.py')
     f = open(fname, 'w')
     f.write(env._setting_overrides)
     f.close()
     put(fname, os.path.join(env._sitepackages,
-                            *env._django_settings_module.split('.')))
+                            *env._django_settings_module.split('.')[:-1]))
 
 
 def upload_wsgi_handler():
