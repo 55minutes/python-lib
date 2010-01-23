@@ -14,8 +14,8 @@ def command(func):
 
 @command
 def loaddata():
-    fixture = env._apps_fixture
-    _local_or_run('manage loaddata %(fixture)s' % vars())
+    fixtures = ' '.join(env._fixtures)
+    _local_or_run('manage loaddata %(fixtures)s' % vars())
 
 
 @command
