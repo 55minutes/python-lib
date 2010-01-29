@@ -134,7 +134,16 @@ def tag_installation():
 
 
 @command
+def pg_dump():
+    dbname = env._dbname
+    outfile = env._db_backup_file
+    run('pg_dump %(dbname)s | gzip > %(outfile)s.gz' % vars())
+
+
+@command
 def deploy():
+    if env._is_production:
+        pg_dump()
     make_distributions()
     make_remote_tempdir()
     upload_distributions()
