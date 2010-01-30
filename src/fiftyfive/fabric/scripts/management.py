@@ -40,7 +40,13 @@ def _local_or_run(cmd, capture=False):
 def graph_models():
     apps = env._apps
     outfile = env._model_graph_file
-    local('manage graph_models %(apps)s -g -o %(outfile)s' % vars()) 
+    local('manage graph_models %(apps)s -g -o %(outfile)s' % vars())
+
+
+@command
+def snakefood(infiles, pdfout):
+    local('sfood --internal %(infiles)s | sfood-graph | dot -Tps | '
+          'pstopdf -i -o %(pdfout)s' % vars())
 
 
 @command
