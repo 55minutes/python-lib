@@ -36,4 +36,4 @@ def south_init():
 
 @command
 def migrate():
-    _local_or_run('manage migrate --all')
+    _local_or_run('manage migrate --all --no-initial-data')
