@@ -45,14 +45,14 @@ def hgpushsvn():
     """
     Perform `hgpushsvn -v` for the given directories.
     """
-    scm_cmd('hgpushsvn -v')
+    scm_cmd('hgpushsvn-2.6 -v')
 
 
 def hgpullsvn():
     """
     Perform `hgpullsvn -v` for the given directories.
     """
-    scm_cmd('hgpullsvn -v')
+    scm_cmd('hgpullsvn-2.6 -v')
 
 
 def hg(cmds):
