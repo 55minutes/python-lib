@@ -58,7 +58,7 @@ def echo_fixturedir():
 def dump_apps_data():
     apps = env._apps
     fixture = env._apps_fixture
-    _local_or_run('manage dumpdata --indent=2 %(apps)s > %(fixture)s' % vars())
+    _local_or_run('manage dumpdata --indent=2 -n %(apps)s > %(fixture)s' % vars())
 
 
 def create_update_with_remote_fixtures(dumpdata_func):
