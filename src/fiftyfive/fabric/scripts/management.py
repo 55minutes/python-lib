@@ -45,8 +45,8 @@ def graph_models():
 
 @command
 def snakefood(infiles, pdfout):
-    local('sfood --internal %(infiles)s | sfood-graph | dot -Tps | '
-          'pstopdf -i -o %(pdfout)s' % vars())
+    local('sfood --internal %(infiles)s | sfood-graph -p | dot -Tps > '
+          '%(pdfout)s' % vars())
 
 
 @command
