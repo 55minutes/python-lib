@@ -19,7 +19,7 @@ def _check_for_scmdir():
 def _cmd_loop(cmd):
     for d in env._scmdir:
         print green(d, bold=True)
-        with cd(d):
+        with lcd(os.path.expanduser(d)):
             local(cmd, capture=False)
         print
 
@@ -41,20 +41,6 @@ def svn(svn_cmds):
 
 
 # Mercurial commands
-def hgpushsvn():
-    """
-    Perform `hgpushsvn -v` for the given directories.
-    """
-    scm_cmd('hgpushsvn-2.6 -v')
-
-
-def hgpullsvn():
-    """
-    Perform `hgpullsvn -v` for the given directories.
-    """
-    scm_cmd('hgpullsvn-2.6 -v')
-
-
 def hg(cmds):
     """
     Specify cmds as a string, such as hg:"log -l5".

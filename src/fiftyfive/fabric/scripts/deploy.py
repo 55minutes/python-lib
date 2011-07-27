@@ -30,13 +30,13 @@ def make_distributions():
     tempdir = env._tempdir
 
     for s, sdict in env._sources.iteritems():
-        with cd(tempdir):
+        with lcd(tempdir):
             local('svn co %s %s' % (sdict['svn_url'], s))
 
         sdict['wcdir'] = os.path.join(tempdir, s)
         sdict['distdir'] = os.path.join(sdict['wcdir'], 'dist')
 
-        with cd(sdict['wcdir']):
+        with lcd(sdict['wcdir']):
             if env._is_production:
                 local('./setup.py egg_info -RDb "" sdist')
             else:
@@ -123,7 +123,7 @@ def tag_installation():
         _ve_run('pip freeze > freeze.txt')
     get(os.path.join(env._remote_tempdir, 'freeze.txt'),
         os.path.join(env._sources['project']['wcdir'], 'dependencies'))
-    with cd(env._sources['project']['wcdir']):
+    with lcd(env._sources['project']['wcdir']):
         tag_name = os.path.splitext(
             os.path.splitext(env._sources['project']['sdist'])[0])[0]
         tag_url = urljoin(env._svn_tag_path, tag_name)
