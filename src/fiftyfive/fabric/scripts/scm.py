@@ -47,4 +47,5 @@ def hg(cmds):
     Perform `hg cmds` for the given directories.
     """
     cmd = u'hg %(cmds)s' % vars()
-    scm_cmd(cmd)
+    with settings(warn_only=True):
+        scm_cmd(cmd)
