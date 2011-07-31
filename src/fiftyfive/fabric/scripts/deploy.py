@@ -137,7 +137,7 @@ def tag_installation():
 def pg_dump():
     dbname = env._dbname
     outfile = env._db_backup_file
-    run('pg_dump %(dbname)s | gzip > %(outfile)s.gz' % vars())
+    run('pg_dump -Fc %(dbname)s | gzip > %(outfile)s.gz' % vars())
 
 
 @command
